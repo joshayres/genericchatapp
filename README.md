@@ -17,6 +17,10 @@ Another chat app
 + Unique Private Servers [X]
 + Multiple text channels per server [X]
 
+## Iteration Pass 2.5
++ Invite other users to new servers [X]
++ Make website look ok [ ]
+
 ## Iteration Pass 3
 + Voice chat with WebRTC [ ]
 + Multiple Voice channels per server [ ]

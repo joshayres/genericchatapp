@@ -8,7 +8,8 @@ const io = new Server(http);
 
 const db = require('./db.js');
 
-app.use(express.static('./client/dist'))
+app.use(express.static('./client/dist'));
+app.use(express.json());
 
 io.on('connection', (socket) => {
   console.log('A user connected');
@@ -18,7 +19,6 @@ io.on('connection', (socket) => {
       .then(user => {
         if (!user) {
           let newUser = new db.User({ email: userData.user.email, name: userData.user.name, servers: ['global'] });
-          console.log(newUser);
           newUser.save()
             .then(() => {
               socket.join('global');
@@ -96,6 +96,19 @@ app.get('/server/:name', (req, res) => {
       console.error(err);
       res.send(err).status(500);
     })
+})
+
+app.patch('/server/:name', (req, res) => {
+  db.User.findOne({email: req.body.email})
+    .then(user => {
+      user.servers.push(req.params.name);
+      return user.save();
+    })
+    .then(res.sendStatus(201))
+    .catch(err => {
+      console.error(err);
+      res.send(err).status(500);
+    });
 })
 
 http.listen(3000, () => {

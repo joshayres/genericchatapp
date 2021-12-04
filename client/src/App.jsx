@@ -11,8 +11,10 @@ import { io } from 'socket.io-client';
 import TextView from './TextView.jsx';
 import NewServer from './NewServer.jsx';
 import ServerList from './ServerList.jsx';
+import JoinServer from './JoinServer.jsx';
 import RoomList from './RoomList.jsx';
 import NewRoom from './NewRoom.jsx';
+
 
 const socket = io();
 
@@ -54,6 +56,7 @@ let App = () => {
         <br />
         <h4>Server List: </h4>
         <ServerList socket={socket} setCurrentServer={setCurrentServer} />
+        <JoinServer user={user} />
         <NewServer socket={socket} user={user} />
         <br />
         <h4>Room List: </h4>
