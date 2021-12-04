@@ -52,7 +52,7 @@ let App = () => {
         <br />
         <NewServer socket={socket} user={user} />
         <br />
-        <ServerList socket={socket} />
+        <ServerList socket={socket} setCurrentServer={setCurrentServer} />
         <br />
         <LogoutButton />
       </div>

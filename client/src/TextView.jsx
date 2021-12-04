@@ -16,6 +16,8 @@ let TextView = (props) => {
 
   return (
     <div>
+      <h2>Server Name: {props.currentServer}</h2>
+      <h3>Room Name: {props.currentRoom}</h3>
       {messages.map(mes => {
         if (mes.room === props.currentServer + props.currentRoom) {
           return (

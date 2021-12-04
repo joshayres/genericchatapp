@@ -13,7 +13,15 @@ let ServerList = (props) => {
   return (
     <div>
       {servers.map(server => {
-        return <p>{server.name}</p>
+        return (
+          <div>
+            <a onClick={() => {
+              // console.log(server.name);
+              props.setCurrentServer(server.name)
+            }}>{server.name}</a>
+            <br />
+          </div>
+        )
       })}
     </div>
   )
