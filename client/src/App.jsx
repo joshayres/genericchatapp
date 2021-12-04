@@ -17,9 +17,21 @@ let App = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    if (user) {
+      socket.emit('load', {
+        user
+      });
+    }
+  }, [user]);
 
+  useEffect(() => {
     socket.on('message posted', (message) => {
       setMessages(messages => [...messages, message]);
+    })
+
+    socket.on('load messages', (prevMessages) => {
+      console.log(prevMessages);
+      setMessages(messages => [...messages, ...prevMessages.messages]);
     })
 
     return () => socket.disconnect();
@@ -41,6 +53,7 @@ let App = () => {
     return (
       <div>
         {messages.map(mes => {
+          console.log(mes);
           return (
             <div>
               <p>{mes.from}</p>

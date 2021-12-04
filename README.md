@@ -10,7 +10,8 @@ Another chat app
 
 ## Itteration Pass 1
 + User auth [X]
-+ Put Unencypted messages into a global text channel [ ]
++ Put Unencypted messages into a global text channel [X]
++ Store messages and users in a db [X]
 + Voice chat with WebRTC [ ]
 
 ## Iteration Pass 2
