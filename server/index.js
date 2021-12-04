@@ -19,9 +19,11 @@ let reloadServers = (socket, user) => {
   Promise.all(serverPromises)
     .then(servers => {
       servers.forEach(server => {
-        server.rooms.forEach(room => {
-          socket.join(server.name + room);
-        })
+        if (server.rooms) {
+          server.rooms.forEach(room => {
+            socket.join(server.name + room);
+          })
+        }
       })
       io.to(socket.id).emit('join servers', servers);
     })
@@ -116,7 +118,7 @@ app.get('/server/:name', (req, res) => {
 })
 
 app.get('/server/:name/users', (req, res) => {
-  db.User.find({servers: req.params.name})
+  db.User.find({ servers: req.params.name })
     .then(users => {
       res.send(users).status(200);
     })
