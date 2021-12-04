@@ -21,7 +21,7 @@ let TextView = (props) => {
       {messages.map(mes => {
         if (mes.room === props.currentServer + props.currentRoom) {
           return (
-            <div>
+            <div className='border-bottom border-dark m-1'>
               <p className='fs-6' >{mes.from}</p>
               <p className='fs-5' style={{
                 marginTop: '-1em'

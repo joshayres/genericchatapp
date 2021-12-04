@@ -17,7 +17,8 @@ let ServerList = (props) => {
           <div>
             <a onClick={() => {
               // console.log(server.name);
-              props.setCurrentServer(server.name)
+              props.setCurrentServer(server.name);
+              props.setCurrentRoom('default');
             }}>{server.name}</a>
             <br />
           </div>

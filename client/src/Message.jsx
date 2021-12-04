@@ -17,8 +17,8 @@ let Message = (props) => {
 
   return (
     <form>
-        <input type='text' name='input' value={content} onChange={(e) => { setContent(e.target.value) }} />
-        <button type='submit' onClick={sendMessage}>Post</button>
+        <input className='form-text' type='text' name='input' value={content} onChange={(e) => { setContent(e.target.value) }} />
+        <button className='btn btn-success m-3' type='submit' onClick={sendMessage}>Post</button>
     </form>
   )
 }

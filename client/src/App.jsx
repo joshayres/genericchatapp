@@ -38,19 +38,26 @@ let App = () => {
 
   if (isAuthenticated) {
     return (
-      <div>
-        <TextView socket={socket} currentServer={currentServer} currentRoom={currentRoom} />
-        <Message socket={socket} currentServer={currentServer} currentRoom={currentRoom} user={user} />
-        <br />
-        <h4>Server List: </h4>
-        <ServerList socket={socket} setCurrentServer={setCurrentServer} />
-        <JoinServer user={user} />
-        <NewServer socket={socket} user={user} />
-        <br />
-        <h4>Room List: </h4>
-        <RoomList currentServer={currentServer} setCurrentRoom={setCurrentRoom} />
-        <NewRoom socket={socket} currentServer={currentServer} />
-        <br />
+      <div className='container h-100 pt-5' style={{minHeight: '100vh'}}>
+        <div className='row'>
+          <div className='col-4'>
+            <h4>Server List: </h4>
+            <ServerList socket={socket} setCurrentServer={setCurrentServer} setCurrentRoom={setCurrentRoom} />
+            <NewServer socket={socket} user={user} />
+            <JoinServer user={user} />
+            <br />
+            <h4>Room List: </h4>
+            <RoomList currentServer={currentServer} setCurrentRoom={setCurrentRoom} />
+            <NewRoom socket={socket} currentServer={currentServer} />
+
+
+          </div>
+          <div className='col-8'>
+            <TextView socket={socket} currentServer={currentServer} currentRoom={currentRoom} />
+            <Message socket={socket} currentServer={currentServer} currentRoom={currentRoom} user={user} />
+          </div>
+
+        </div>
         <LogoutButton />
       </div>
     )
