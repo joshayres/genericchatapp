@@ -15,6 +15,7 @@ import JoinServer from './JoinServer.jsx';
 import RoomList from './RoomList.jsx';
 import NewRoom from './NewRoom.jsx';
 import Message from './Message.jsx';
+import UserList from './UserList.jsx';
 
 const socket = io();
 
@@ -40,7 +41,7 @@ let App = () => {
     return (
       <div className='container h-100 pt-5' style={{minHeight: '100vh'}}>
         <div className='row'>
-          <div className='col-4'>
+          <div className='col-3'>
             <h4>Server List: </h4>
             <ServerList socket={socket} setCurrentServer={setCurrentServer} setCurrentRoom={setCurrentRoom} user={user} />
             <NewServer socket={socket} user={user} />
@@ -52,9 +53,13 @@ let App = () => {
 
 
           </div>
-          <div className='col-8'>
+          <div className='col-6'>
             <TextView socket={socket} currentServer={currentServer} currentRoom={currentRoom} />
             <Message socket={socket} currentServer={currentServer} currentRoom={currentRoom} user={user} />
+          </div>
+
+          <div className='col'>
+            <UserList currentServer={currentServer} />
           </div>
 
         </div>

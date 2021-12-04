@@ -115,6 +115,13 @@ app.get('/server/:name', (req, res) => {
     })
 })
 
+app.get('/server/:name/users', (req, res) => {
+  db.User.find({servers: req.params.name})
+    .then(users => {
+      res.send(users).status(200);
+    })
+})
+
 app.patch('/server/:name', (req, res) => {
   db.User.findOne({ email: req.body.email })
     .then(user => {
