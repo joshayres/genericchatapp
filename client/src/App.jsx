@@ -14,14 +14,13 @@ import ServerList from './ServerList.jsx';
 import JoinServer from './JoinServer.jsx';
 import RoomList from './RoomList.jsx';
 import NewRoom from './NewRoom.jsx';
-
+import Message from './Message.jsx';
 
 const socket = io();
 
 let App = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
 
-  const [content, setContent] = useState('');
   const [currentServer, setCurrentServer] = useState('global');
   const [currentRoom, setCurrentRoom] = useState('default');
 
@@ -33,16 +32,6 @@ let App = () => {
     }
   }, [user]);
 
-  let sendMessage = () => {
-    socket.emit('room message', {
-      content,
-      to: currentServer + currentRoom,
-      from: user.name,
-      server: currentServer
-    })
-    setContent('');
-  }
-
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -51,8 +40,7 @@ let App = () => {
     return (
       <div>
         <TextView socket={socket} currentServer={currentServer} currentRoom={currentRoom} />
-        <input type='text' name='input' value={content} onChange={(e) => { setContent(e.target.value) }} />
-        <button onClick={sendMessage}>Post</button>
+        <Message socket={socket} currentServer={currentServer} currentRoom={currentRoom} user={user} />
         <br />
         <h4>Server List: </h4>
         <ServerList socket={socket} setCurrentServer={setCurrentServer} />

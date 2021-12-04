@@ -22,8 +22,10 @@ let TextView = (props) => {
         if (mes.room === props.currentServer + props.currentRoom) {
           return (
             <div>
-              <p>{mes.from}</p>
-              <p>{mes.content}</p>
+              <p className='fs-6' >{mes.from}</p>
+              <p className='fs-5' style={{
+                marginTop: '-1em'
+              }} >{mes.content}</p>
             </div>
           )
         }
