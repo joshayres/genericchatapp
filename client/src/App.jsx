@@ -11,6 +11,8 @@ import { io } from 'socket.io-client';
 import TextView from './TextView.jsx';
 import NewServer from './NewServer.jsx';
 import ServerList from './ServerList.jsx';
+import RoomList from './RoomList.jsx';
+import NewRoom from './NewRoom.jsx';
 
 const socket = io();
 
@@ -50,9 +52,13 @@ let App = () => {
         <input type='text' name='input' value={content} onChange={(e) => { setContent(e.target.value) }} />
         <button onClick={sendMessage}>Post</button>
         <br />
+        <h4>Server List: </h4>
+        <ServerList socket={socket} setCurrentServer={setCurrentServer} />
         <NewServer socket={socket} user={user} />
         <br />
-        <ServerList socket={socket} setCurrentServer={setCurrentServer} />
+        <h4>Room List: </h4>
+        <RoomList currentServer={currentServer} setCurrentRoom={setCurrentRoom} />
+        <NewRoom socket={socket} currentServer={currentServer} />
         <br />
         <LogoutButton />
       </div>

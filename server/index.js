@@ -1,7 +1,10 @@
 const express = require('express');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const http = createServer(app);
+const io = new Server(http);
 
 const db = require('./db.js');
 
@@ -57,6 +60,15 @@ io.on('connection', (socket) => {
       });
   })
 
+  socket.on('new room', (room) => {
+    db.Server.findOne({name: room.server})
+      .then(server => {
+        server.rooms.push(room.room);
+        return server.save();
+      })
+      .catch(err => console.error(err));
+  })
+
   socket.on('room message', ({ content, to, from, server }) => {
     let message = new db.Message({ from, content, server: server, room: to });
     message.save()
@@ -75,7 +87,16 @@ io.on('connection', (socket) => {
   })
 });
 
-
+app.get('/server/:name', (req, res) => {
+  db.Server.findOne({name: req.params.name})
+    .then(server => {
+      res.send(server).status(200);
+    })
+    .catch(err => {
+      console.error(err);
+      res.send(err).status(500);
+    })
+})
 
 http.listen(3000, () => {
   console.log('Listening on port 3000')

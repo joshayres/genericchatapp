@@ -14,8 +14,8 @@ Another chat app
 + Store messages and users in a db [X]
 
 ## Iteration Pass 2
-+ Unique Private Servers [ ]
-+ Multiple text channels per server [ ]
++ Unique Private Servers [X]
++ Multiple text channels per server [X]
 
 ## Iteration Pass 3
 + Voice chat with WebRTC [ ]
