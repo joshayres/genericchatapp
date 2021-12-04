@@ -12,13 +12,14 @@ Another chat app
 + User auth [X]
 + Put Unencypted messages into a global text channel [X]
 + Store messages and users in a db [X]
-+ Voice chat with WebRTC [ ]
 
 ## Iteration Pass 2
 + Unique Private Servers [ ]
-+ Multiple Text/Voice channels per server [ ]
++ Multiple text channels per server [ ]
 
 ## Iteration Pass 3
++ Voice chat with WebRTC [ ]
++ Multiple Voice channels per server [ ]
 + E2E Direct Messaging between users [ ]
 
 ## Iteration Pass 4

@@ -10,23 +10,62 @@ app.use(express.static('./client/dist'))
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  socket.join('global');
+  socket.on('load', (userData) => {
+    db.User.findOne({ email: userData.user.email })
+      .then(user => {
+        if (!user) {
+          let newUser = new db.User({ email: userData.user.email, name: userData.user.name, servers: ['global'] });
+          console.log(newUser);
+          newUser.save()
+            .then(() => {
+              socket.join('global');
+              io.to(socket.id).emit('join servers', { servers: [{ name: 'global' }] });
+            })
+        } else {
+          let serverPromises = [];
+          user.servers.forEach(server => {
+            serverPromises.push(db.Server.findOne({ name: server }))
+          })
+          Promise.all(serverPromises)
+            .then(servers => {
+              servers.forEach(server => {
+                server.rooms.forEach(room => {
+                  socket.join(server.name + room);
+                })
+              })
+              io.to(socket.id).emit('join servers', servers);
+            })
+        }
+      })
 
-  socket.on('load', () => {
+    // Send messages for all rooms user is apart of
     db.Message.find()
       .then(messages => {
-        io.to(socket.id).emit('load messages', {messages})
+        io.to(socket.id).emit('load messages', { messages })
       })
   })
 
-  socket.on('room message', ({ content, to, from }) => {
-    console.log(content, to, from);
-    let message = new db.Message({ from, content, room: to });
+  socket.on('new server', ({ name, user }) => {
+    let newServer = new db.Server({ name, rooms: ['default'] });
+    newServer.save()
+      .then(() => {
+        db.User.findOne({ email: user })
+          .then(u => {
+            u.servers.push(name);
+            return u.save();
+          })
+      });
+  })
+
+  socket.on('room message', ({ content, to, from, server }) => {
+    let message = new db.Message({ from, content, server: server, room: to });
     message.save()
       .then(() => {
         io.to(to).emit('message posted', {
           content,
-          from
+          from,
+          room: to,
+          server
         })
       })
   })

@@ -8,13 +8,18 @@ import LogoutButton from './LogoutButton.jsx';
 
 import { io } from 'socket.io-client';
 
+import TextView from './TextView.jsx';
+import NewServer from './NewServer.jsx';
+import ServerList from './ServerList.jsx';
+
 const socket = io();
 
 let App = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
 
   const [content, setContent] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [currentServer, setCurrentServer] = useState('global');
+  const [currentRoom, setCurrentRoom] = useState('default');
 
   useEffect(() => {
     if (user) {
@@ -24,25 +29,14 @@ let App = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    socket.on('message posted', (message) => {
-      setMessages(messages => [...messages, message]);
-    })
-
-    socket.on('load messages', (prevMessages) => {
-      console.log(prevMessages);
-      setMessages(messages => [...messages, ...prevMessages.messages]);
-    })
-
-    return () => socket.disconnect();
-  }, []);
-
   let sendMessage = () => {
     socket.emit('room message', {
       content,
-      to: 'global',
-      from: user.name
+      to: currentServer + currentRoom,
+      from: user.name,
+      server: currentServer
     })
+    setContent('');
   }
 
   if (isLoading) {
@@ -52,17 +46,13 @@ let App = () => {
   if (isAuthenticated) {
     return (
       <div>
-        {messages.map(mes => {
-          console.log(mes);
-          return (
-            <div>
-              <p>{mes.from}</p>
-              <p>{mes.content}</p>
-            </div>
-          )
-        })}
+        <TextView socket={socket} currentServer={currentServer} currentRoom={currentRoom} />
         <input type='text' name='input' value={content} onChange={(e) => { setContent(e.target.value) }} />
         <button onClick={sendMessage}>Post</button>
+        <br />
+        <NewServer socket={socket} user={user} />
+        <br />
+        <ServerList socket={socket} />
         <br />
         <LogoutButton />
       </div>
