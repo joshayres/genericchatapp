@@ -19,7 +19,7 @@ let reloadServers = (socket, user) => {
   Promise.all(serverPromises)
     .then(servers => {
       servers.forEach(server => {
-        if (server.rooms) {
+        if (server) {
           server.rooms.forEach(room => {
             socket.join(server.name + room);
           })

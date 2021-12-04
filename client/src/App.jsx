@@ -41,7 +41,7 @@ let App = () => {
     return (
       <div className='container h-100 pt-5' style={{minHeight: '100vh'}}>
         <div className='row'>
-          <div className='col-3'>
+          <div className='col-4'>
             <h4>Server List: </h4>
             <ServerList socket={socket} setCurrentServer={setCurrentServer} setCurrentRoom={setCurrentRoom} user={user} />
             <NewServer socket={socket} user={user} />
@@ -58,7 +58,7 @@ let App = () => {
             <Message socket={socket} currentServer={currentServer} currentRoom={currentRoom} user={user} />
           </div>
 
-          <div className='col'>
+          <div className='col-2'>
             <UserList currentServer={currentServer} />
           </div>
 
