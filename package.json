@@ -6,7 +6,8 @@
   "scripts": {
     "dev:react": "webpack --config ./webpack.config.js --mode development -w",
     "dev:server": "nodemon server/index.js",
-    "dev": "npm run dev:react & npm run dev:server"
+    "dev": "npm run dev:react & npm run dev:server",
+    "build": "webpack --config ./webpack.config --mode production"
   },
   "author": "",
   "license": "ISC",
