@@ -5,10 +5,12 @@ let ServerList = (props) => {
   const [servers, setServers] = useState([])
 
   useEffect(() => {
-    props.socket.on('join servers', (serverList) => {
-      setServers(serverList);
-    })
-  }, [])
+    if (props.user) {
+      props.socket.on('join servers', (serverList) => {
+        setServers(serverList);
+      })
+    }
+  }, [props.user])
 
   return (
     <div>

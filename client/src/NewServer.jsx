@@ -9,7 +9,8 @@ let NewServer = (props) => {
     props.socket.emit('new server', {
       name: serverName,
       user: props.user.email
-    })
+    });
+    setServerName('');
   }
 
   return (

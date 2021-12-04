@@ -11,10 +11,27 @@ const db = require('./db.js');
 app.use(express.static('./client/dist'));
 app.use(express.json());
 
+let reloadServers = (socket, user) => {
+  let serverPromises = [];
+  user.servers.forEach(server => {
+    serverPromises.push(db.Server.findOne({ name: server }))
+  })
+  Promise.all(serverPromises)
+    .then(servers => {
+      servers.forEach(server => {
+        server.rooms.forEach(room => {
+          socket.join(server.name + room);
+        })
+      })
+      io.to(socket.id).emit('join servers', servers);
+    })
+}
+
 io.on('connection', (socket) => {
   console.log('A user connected');
 
   socket.on('load', (userData) => {
+    // console.log(userData);
     db.User.findOne({ email: userData.user.email })
       .then(user => {
         if (!user) {
@@ -25,19 +42,7 @@ io.on('connection', (socket) => {
               io.to(socket.id).emit('join servers', { servers: [{ name: 'global' }] });
             })
         } else {
-          let serverPromises = [];
-          user.servers.forEach(server => {
-            serverPromises.push(db.Server.findOne({ name: server }))
-          })
-          Promise.all(serverPromises)
-            .then(servers => {
-              servers.forEach(server => {
-                server.rooms.forEach(room => {
-                  socket.join(server.name + room);
-                })
-              })
-              io.to(socket.id).emit('join servers', servers);
-            })
+          reloadServers(socket, user);
         }
       })
 
@@ -52,19 +57,31 @@ io.on('connection', (socket) => {
     let newServer = new db.Server({ name, rooms: ['default'] });
     newServer.save()
       .then(() => {
-        db.User.findOne({ email: user })
-          .then(u => {
-            u.servers.push(name);
-            return u.save();
-          })
-      });
+        return db.User.findOne({ email: user })
+      })
+      .then(u => {
+        u.servers.push(name);
+        return u.save();
+      })
+      .then(u => {
+        reloadServers(socket, u);
+      })
+      .catch(err => console.error(err));
   })
 
+  // TODO: Fix this you dumb ass
   socket.on('new room', (room) => {
-    db.Server.findOne({name: room.server})
+    db.Server.findOne({ name: room.server })
       .then(server => {
         server.rooms.push(room.room);
         return server.save();
+      })
+      .then(() => {
+        return db.User.findOne({ email: room.user.email })
+      })
+      .then(user => {
+        console.log(user);
+        reloadServers(socket, user);
       })
       .catch(err => console.error(err));
   })
@@ -88,7 +105,7 @@ io.on('connection', (socket) => {
 });
 
 app.get('/server/:name', (req, res) => {
-  db.Server.findOne({name: req.params.name})
+  db.Server.findOne({ name: req.params.name })
     .then(server => {
       res.send(server).status(200);
     })
@@ -99,7 +116,7 @@ app.get('/server/:name', (req, res) => {
 })
 
 app.patch('/server/:name', (req, res) => {
-  db.User.findOne({email: req.body.email})
+  db.User.findOne({ email: req.body.email })
     .then(user => {
       user.servers.push(req.params.name);
       return user.save();

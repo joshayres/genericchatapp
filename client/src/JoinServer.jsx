@@ -7,7 +7,8 @@ let JoinServer = (props) => {
 
   let joinServer = (e) => {
     e.preventDefault();
-    axios.patch(`/server/${serverName}`, {email: props.user.email})
+    axios.patch(`/server/${serverName}`, { email: props.user.email });
+    setServerName('');
   }
 
   return (

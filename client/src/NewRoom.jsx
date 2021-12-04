@@ -8,8 +8,10 @@ let NewRoom = (props) => {
     e.preventDefault();
     props.socket.emit('new room', {
       server: props.currentServer,
-      room: roomName
-    })
+      room: roomName,
+      user: props.user
+    });
+    setRoomName('');
   }
 
   return (

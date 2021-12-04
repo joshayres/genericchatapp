@@ -42,13 +42,13 @@ let App = () => {
         <div className='row'>
           <div className='col-4'>
             <h4>Server List: </h4>
-            <ServerList socket={socket} setCurrentServer={setCurrentServer} setCurrentRoom={setCurrentRoom} />
+            <ServerList socket={socket} setCurrentServer={setCurrentServer} setCurrentRoom={setCurrentRoom} user={user} />
             <NewServer socket={socket} user={user} />
-            <JoinServer user={user} />
+            <JoinServer user={user} socket={socket} />
             <br />
             <h4>Room List: </h4>
             <RoomList currentServer={currentServer} setCurrentRoom={setCurrentRoom} />
-            <NewRoom socket={socket} currentServer={currentServer} />
+            <NewRoom socket={socket} currentServer={currentServer} user={user} />
 
 
           </div>

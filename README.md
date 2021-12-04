@@ -19,7 +19,7 @@ Another chat app
 
 ## Iteration Pass 2.5
 + Invite other users to new servers [X]
-+ Make website look ok [ ]
++ Make website look ok [X]
 + Reload page when creating new server/room [ ]
 
 ## Iteration Pass 3
