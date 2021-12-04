@@ -14,7 +14,7 @@ let RoomList = (props) => {
 
   return (
     <div>
-      {rooms.map(room => {
+      {rooms && rooms.map(room => {
         return (
           <div>
             <a onClick={() => {
